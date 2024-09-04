@@ -1,0 +1,22 @@
+DEF TFF
+	PORT IN T
+	PORT IN R
+	PORT IN E
+
+	PORT OUT QT
+	PORT OUT QC
+
+
+	# I & !R ---> D
+	# I: QT ⊕ T
+	NET !R
+	NET D
+	NET I
+
+	INST N1 NOT R !R
+
+	INST X1 XOR QT T I
+	INST A1 AND I !R D
+	INST DFF1 DFF D E QT QC
+
+ENDDEF
