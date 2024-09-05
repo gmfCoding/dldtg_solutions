@@ -1,0 +1,22 @@
+# ~(~(B & ~(C & D)) & ~(A & ~(D & ~(C & D))))
+# ~(~(B & E) & ~(A & ~(D & E)))
+DEF TRUTH_TABLE3
+  PORT IN A
+  PORT IN B
+  PORT IN C
+  PORT IN D
+  PORT OUT Z
+  
+  NET E
+  NET DE
+  NET BE
+  NET ADE
+
+  INST N1 NAND C D E
+  INST N2 NAND D E DE
+  INST N3 NAND A DE ADE
+
+  INST N4 NAND B E BE
+  INST N5 NAND BE ADE Z
+
+ENDDEF

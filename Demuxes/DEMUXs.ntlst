@@ -1,0 +1,97 @@
+# PART_S _S denotes that it takes in both S<X:Y> and the inverted of S<X:Y> this aves many NOT/NAND gates per mux
+
+DEF DEMUX21
+  PORT IN A
+  PORT IN S
+  PORT OUT Z0
+  PORT OUT Z1
+  
+  NET !S
+  NET SB
+  NET !SA
+
+  INST N1 NAND S B SB
+  INST N2 NAND S S !S
+  INST N3 NAND !S A !SA
+  INST N4 NAND !SA SB Z
+ENDDEF
+
+DEF MUX21_S
+  PORT IN A
+  PORT IN B
+  PORT IN S
+  PORT IN !S
+  PORT OUT Z
+  
+  NET SB
+  NET !SA
+
+  INST N1 NAND S B SB
+  INST N3 NAND !S A !SA
+  INST N4 NAND !SA SB Z
+ENDDEF
+
+DEF MUX21x8_S
+  PORT IN A<7:0>
+  PORT IN B<7:0>
+  PORT IN S
+  PORT IN !S
+  PORT OUT Z<7:0>
+  
+  INST M1 MUX21_S A<0> B<0> S !S Z<0>
+  INST M2 MUX21_S A<1> B<1> S !S Z<1>
+  INST M3 MUX21_S A<2> B<2> S !S Z<2>
+  INST M4 MUX21_S A<3> B<3> S !S Z<3>
+  INST M5 MUX21_S A<4> B<4> S !S Z<4>
+  INST M6 MUX21_S A<5> B<5> S !S Z<5>
+  INST M7 MUX21_S A<6> B<6> S !S Z<6>
+  INST M8 MUX21_S A<7> B<7> S !S Z<7>
+ENDDEF
+
+DEF MUX41x8_S
+  PORT IN A<7:0>
+  PORT IN B<7:0>
+  PORT IN C<7:0>
+  PORT IN D<7:0>
+  PORT IN S<1:0>
+  PORT IN !S<1:0>
+  PORT OUT Z<7:0>
+  
+  NET MXHI<7:0>
+  NET MXLO<7:0>
+
+  INST M1 MUX21x8_S A<7:0> B<7:0> S<0> !S<0> MXLO<7:0>
+  INST M2 MUX21x8_S C<7:0> D<7:0> S<0> !S<0> MXHI<7:0>
+  INST M3 MUX21x8_S MXLO<7:0> MXHI<7:0> S<1> !S<1> Z<7:0>
+ENDDEF
+
+DEF MUX81x8
+
+  PORT IN I0<7:0>
+  PORT IN I1<7:0>
+  PORT IN I2<7:0>
+  PORT IN I3<7:0>
+
+  PORT IN I4<7:0>
+  PORT IN I5<7:0>
+  PORT IN I6<7:0>
+  PORT IN I7<7:0>
+
+  PORT IN S<2:0>
+  PORT IN Z<7:0>
+
+  NET MXHI<7:0>
+  NET MXLO<7:0>
+
+  NET !S<2:0>
+
+  INST N1 NOT S<0> !S<0>
+  INST N2 NOT S<1> !S<1>
+  INST N3 NOT S<2> !S<2>
+
+  INST M1 MUX41x8_S I0<7:0> I1<7:0> I2<7:0> I3<7:0> S<1:0> !S<1:0> MXLO<7:0>
+  INST M2 MUX41x8_S I4<7:0> I5<7:0> I6<7:0> I7<7:0> S<1:0> !S<1:0> MXHI<7:0>
+
+  INST M3 MUX21x8_S MXLO<7:0> MXHI<7:0> S<2> !S<2> Z<7:0>
+
+ENDDEF

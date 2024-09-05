@@ -1,0 +1,25 @@
+# Four NAND GATES
+DEF DEMUX12
+  PORT IN A
+  PORT IN S
+  PORT OUT Z0
+  PORT OUT Z1
+  
+
+  # FIRE: ∼(A & S)
+  # WATER: ~(A & FIRE)
+  NET FIRE
+  NET WATER
+
+  # ∼(A & S)
+  INST N1 NAND A S FIRE
+
+  # ~(A & ∼(A & S))
+  INST N2 NAND A FIRE WATER
+
+  # A & FIRE (fire)
+  INST N3 NOT WATER Z0
+
+  # A & S
+  INST N4 NOT FIRE Z1
+ENDDEF
